@@ -80,7 +80,7 @@ def getDir3d(inputid, mode=None, release=None):
     release = marvin.config.release if not release else release
     drpver, __ = marvin.config.lookUpVersions(release=release)
 
-    if check_versions(drpver, 'v1_5_4'):
+    if check_versions(drpver.replace("_", "."), '1.5.4'):
         from marvin.tools.plate import Plate
         try:
             plate = Plate(plate=plateid, nocubes=True, mode=mode, release=release)

@@ -49,7 +49,7 @@ class TestImage(object):
         assert im.plateifu == plateifu
         assert im.data_origin == origin
 
-        if not check_versions(im._drpver, 'v2_4_3'):
+        if not check_versions(im._drpver, '2.4.3'):
             assert dir3d in im._getFullPath()
 
     def test_release(self, plateifu):

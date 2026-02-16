@@ -21,7 +21,7 @@ import sys
 import warnings
 from builtins import range
 from collections import OrderedDict
-from packaging.version import parse
+from packaging.version import parse as parse_version
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -1751,7 +1751,7 @@ def get_drpall_table(drpver=None, drpall=None, hdu='MANGA'):
         drpTable[drpver] = {}
 
     # check for hdu
-    hduext = hdu if check_versions(drpver, 'v2_5_3') else 'MANGA'
+    hduext = hdu if check_versions(drpver.replace("_", "."), 'v2.5.3') else 'MANGA'
     if hdu not in drpTable[drpver]:
         drpall = drpall if drpall else get_drpall_path(drpver=drpver)
         data = {hduext: table.Table.read(drpall, hdu=hduext)}
@@ -1841,7 +1841,7 @@ def check_versions(version1, version2):
         A boolean indicating if version1 is >= version2
     '''
 
-    return parse(version1) >= parse(version2)
+    return parse_version(version1) >= parse_version(version2)
 
 
 def get_manga_image(cube=None, drpver=None, plate=None, ifu=None, dir3d=None, local=None, public=None):

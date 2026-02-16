@@ -333,10 +333,10 @@ class TestDownloadList(object):
 class TestCheckVersion(object):
 
     @pytest.mark.parametrize('v1, exp',
-                             [('v3_1_1', True),
-                              ('v2_4_3', False)], ids=['good', 'bad'])
+                             [('v3.1.1', True),
+                              ('v2.4.3', False)], ids=['good', 'bad'])
     def test_checks(self, v1, exp):
-        assert check_versions(v1, 'v2_5_3') is exp
+        assert check_versions(v1, 'v2.5.3') is exp
 
 
 class TestGetMangaImage(object):
