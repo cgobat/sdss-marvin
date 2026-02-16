@@ -52,16 +52,16 @@ viewargs = {'name': fields.String(required=True, metadata={"location": 'view_arg
             }
 
 # List of all form parameters that are needed in all the API routes
-# allow_none = True allows for the parameter to be non-existent when required=False and missing is not set
-# setting missing = None by itself also works except when the parameter is also required
-# (i.e. required=True + missing=None does not trigger the "required" validation error when it should)
+# allow_none = True allows for the parameter to be non-existent when required=False and load_default is not set
+# setting load_default = None by itself also works except when the parameter is also required
+# (i.e. required=True + load_default=None does not trigger the "required" validation error when it should)
 params = {'query': {'searchfilter': fields.String(allow_none=True),
                     'paramdisplay': fields.String(allow_none=True, validate=validate.OneOf(['all', 'best'])),
                     'task': fields.String(allow_none=True, validate=validate.OneOf(['clean', 'getprocs'])),
                     'start': fields.Integer(allow_none=True, validate=validate.Range(min=0)),
                     'end': fields.Integer(allow_none=True, validate=validate.Range(min=0)),
                     'offset': fields.Integer(allow_none=True, validate=validate.Range(min=0)),
-                    'limit': fields.Integer(allow_none=True, missing=100, validate=validate.Range(max=50000)),
+                    'limit': fields.Integer(allow_none=True, load_default=100, validate=validate.Range(max=50000)),
                     'sort': fields.String(allow_none=True),
                     'order': fields.String(load_default='asc', validate=validate.OneOf(['asc', 'desc'])),
                     'rettype': fields.String(allow_none=True, validate=validate.OneOf(['cube', 'spaxel', 'maps', 'rss', 'modelcube'])),
@@ -99,11 +99,9 @@ params = {'query': {'searchfilter': fields.String(allow_none=True),
 
 
 # Add a custom Flask session location handler
-@parser.location_handler('session')
-def parse_session(req, name, field):
-    from flask import session as current_session
-    value = current_session.get(name, None)
-    return value
+@parser.location_loader('session')
+def parse_session(req, schema):
+    return req.data
 
 
 class ArgValidator(object):
